@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mirante - Hamburgueria Artesanal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #e6c339;
+            --secondary-color: #f1faee;
+            --accent-color: #a8dadc;
+            --dark-color: #1d3557;
+            --light-color: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--secondary-color);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .nav-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 70%;
+            height: 100vh;
+            background-color: var(--dark-color);
+            transition: right 0.3s ease;
+            z-index: 1001;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .nav-menu.active {
+            right: 0;
+        }
+
+        .close-btn {
+            align-self: flex-end;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
+
+        .nav-menu a:hover {
+            color: var(--accent-color);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        main {
+            margin-top: 70px;
+            padding: 1rem;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            animation: slideIn 1s ease-in-out;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            margin: 1.5rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-color);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .menu-category {
+            margin-bottom: 2rem;
+        }
+
+        .menu-item {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-name {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--dark-color);
+        }
+
+        .item-price {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        .item-desc {
+            color: #666;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .item-footer {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .recommended-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: gold;
+            color: #333;
+            padding: 0.2rem 0.5rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transform: rotate(15deg);
+            animation: wiggle 2s infinite;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .social-link {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 50px;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .social-link:hover {
+            transform: scale(1.1) rotate(10deg);
+            background-color: var(--dark-color);
+        }
+
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+
+        .footer-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: white;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes wiggle {
+
+            0%,
+            100% {
+                transform: rotate(15deg);
+            }
+
+            50% {
+                transform: rotate(25deg);
+            }
+        }
+
+        .knowledge-section {
+            background-color: var(--accent-color);
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+
+        .knowledge-item {
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        @media (min-width: 768px) {
+            .menu-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .hero {
+                height: 300px;
+            }
+
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+
+            .nav-menu {
+                width: 40%;
+            }
+        }
+
+        .location-section {
+    margin: 2rem 0;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.map-container {
+    margin: 1rem 0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.address {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: var(--light-color);
+    border-radius: 8px;
+}
+
+.address p {
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.address i {
+    color: var(--primary-color);
+}
+/* Adicione isso na seção de estilos */
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logo-img {
+    height: 50px; /* Tamanho padrão para mobile */
+    transition: transform 0.3s ease;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Tamanho maior para desktop */
+@media (min-width: 768px) {
+    .logo-img {
+        height: 70px; /* Tamanho maior para desktop */
+    }
+    
+    .logo-text {
+        font-size: 1.8rem;
+    }
+}
+.logo-mir {
+    width: 150px; /* ou o tamanho desejado */
+    height: auto; /* mantém a proporção */
+}
+
+/* Animação para a logo quando hover */
+.logo-img:hover {
+    transform: rotate(5deg) scale(1.05);
+}
+
+/* Adicione isso na seção de estilos */
+.recommended-section {
+    background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+    color: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin: 2rem 0;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.recommended-section:hover {
+    transform: translateY(-5px);
+}
+
+.recommended-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    position: relative;
+    display: inline-block;
+}
+
+.recommended-title::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background-color: var(--accent-color);
+}
+
+.recommended-content {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.recommended-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 3rem;
+    opacity: 0.2;
+}
+
+/* Efeito de bolhas decorativas */
+.recommended-section::before {
+    content: '';
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    top: -30px;
+    right: -30px;
+}
+
+.recommended-section::after {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    bottom: -20px;
+    left: -20px;
+}
+
+</style>
+</head>
+
+<body>
+    <header>
+        <div class="logo-container">
+            <!-- Substitua "logo-mirante.png" pelo caminho real da sua imagem -->
+            <img src="/logo_mirante.png" alt="Logo Mirante Hamburgueria" class="logo-img">
+            <img src="/mirante.png" alt="Logo Mirante Hamburgueria" class="logo-mir">
+        </div>
+        <button class="menu-btn" id="menuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <nav class="nav-menu" id="navMenu">
+        <button class="close-btn" id="closeBtn">
+            <i class="fas fa-times"></i>
+        </button>
+        <a href="#classicos">Clássicos</a>
+        <a href="#frescura">Cheios de Frescura</a>
+        <a href="#australiana">Frescura Australiana</a>
+        <a href="#frango">Frescura de Frango</a>
+        <a href="#porcoes">Porções</a>
+        <a href="#bebidas">Bebidas</a>
+        <a href="#localizacao">Localização</a>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <h1>Hamburgueria Artesanal</h1>
+        </section>
+
+        <section id="classicos" class="menu-category">
+            <h2 class="section-title">Clássicos</h2>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">X-Tudo</span>
+                        <span class="item-price">R$25/R$32</span>
+                    </div>
+                    <p class="item-desc">Pão Brioche, Carne(65g), Queijo, Bacon, Ovo, Salsicha, Tomate, Alface e
+                        Maionese Branca.</p>
+                    <div class="item-footer">
+                        <span>SEM FRITAS</span>
+                        <span>COM FRITAS</span>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">X-Bacon</span>
+                        <span class="item-price">R$24/R$31</span>
+                    </div>
+                    <p class="item-desc">Pão Brioche, Carne(65g), Queijo, Bacon, Ovo, Tomate, Alface e Maionese Branca.
+                    </p>
+                    <div class="item-footer">
+                        <span>SEM FRITAS</span>
+                        <span>COM FRITAS</span>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">X-Salada</span>
+                        <span class="item-price">R$20/R$28</span>
+                    </div>
+                    <p class="item-desc">Pão Brioche, Carne(65g), Queijo, Ovo, Tomate, Alface e Maionese Branca.</p>
+                    <div class="item-footer">
+                        <span>SEM FRITAS</span>
+                        <span>COM FRITAS</span>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="recommended-badge">Recomendado</div><br>
+                    <div class="item-header">
+                        <span class="item-name">X-Tudo e Mais um Pouco</span>
+                        <span class="item-price">R$30/R$38</span>
+                    </div>
+                    <p class="item-desc">Pão Brioche, 2 Carne(65g), Queijo, Bacon, Ovo, Salsicha, Milho, Tomate, Alface,
+                        Batata Palha e Maionese Branca.</p>
+                    <div class="item-footer">
+                        <span>SEM FRITAS</span>
+                        <span>COM FRITAS</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+        
+    <!-- Seção Recomendado 1 - Tá com Fome? -->
+    <div class="recommended-section">
+        <i class="fas fa-hamburger recommended-icon"></i>
+        <h3 class="recommended-title">Tá com Fome?</h3>
+        <p class="recommended-content">Come um X-Tudo e Mais um Pouco. Nossa versão do famoso "podrão" de rua, mas claro, com aquele toque do Mirante.</p>
+    </div>
+
+    <div class="knowledge-section">
+        <h3>É Válido Ressaltar!</h3>
+        <p>Todas as nossas carnes fazem parte do mesmo Blend, tudo fresquinho e reabastecidos diariamente.</p>
+    </div>
+
+        <section id="frescura" class="menu-category">
+            <h2 class="section-title">Cheios de Frescura</h2>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="recommended-badge">Recomendado</div><br>
+                    <div class="item-header">
+                        <span class="item-name">Smash Simples</span>
+                        <span class="item-price">R$21/R$33</span>
+                    </div>
+                    <p class="item-desc">Pão Brioche, Carne(90g), Bacon, Maionese Especial (a base de picles).</p>
+                    <div class="item-footer">
+                        <span>SEM FRITAS</span>
+                        <span>COM FRITAS</span>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">Smash Duplo</span>
+                        <span class="item-price">R$32/R$44</span>
+                    </div>
+                    <p class="item-desc">Pão Brioche, 2 Carnes(90g cada), Queijo, Bacon, Sweet Picles e Barbecue.</p>
+                    <div class="item-footer">
+                        <span>SEM FRITAS</span>
+                        <span>COM FRITAS</span>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">Bacon Salad</span>
+                        <span class="item-price">R$27/R$39</span>
+                    </div>
+                    <p class="item-desc">Pão Brioche, Carne(150g), Queijo, Bacon, Tomate, Alface e Maionese Branca.</p>
+                    <div class="item-footer">
+                        <span>SEM FRITAS</span>
+                        <span>COM FRITAS</span>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">Onion Burguer</span>
+                        <span class="item-price">R$33/R$45</span>
+                    </div>
+                    <p class="item-desc">Pão Prime, 2 Carnes(90g cada), Queijo, Bacon, Onion Rings, Tomate, Alface e
+                        Barbecue.</p>
+                    <div class="item-footer">
+                        <span>SEM FRITAS</span>
+                        <span>COM FRITAS</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="australiana" class="menu-category">
+            <h2 class="section-title">Cheios de Frescura Australiana</h2>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">Australiano Burguer</span>
+                        <span class="item-price">R$28/R$37</span>
+                    </div>
+                    <p class="item-desc">Pão Australiano, 2 Carnes(90g cada), Queijo, Molho de Cheddar, Bacon e Maionese
+                        Branca.</p>
+                    <div class="item-footer">
+                        <span>SEM FRITAS</span>
+                        <span>COM FRITAS</span>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">Cheddar</span>
+                        <span class="item-price">R$28/R$40</span>
+                    </div>
+                    <p class="item-desc">Pão Australiano, Carne(150g), Molho de Cheddar, Bacon, Cebola Caramelizada e
+                        Maionese Branca.</p>
+                    <div class="item-footer">
+                        <span>SEM FRITAS</span>
+                        <span>COM FRITAS</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+        
+    <!-- Seção Recomendado 2 - Tá com Pouca Fome? -->
+    <div class="recommended-section" style="background: linear-gradient(135deg, var(--accent-color), var(--dark-color));">
+        <i class="fas fa-utensils recommended-icon"></i>
+        <h3 class="recommended-title">Tá com Pouca Fome?</h3>
+        <p class="recommended-content">Vai de Smash Simples. O equilíbrio perfeito de um pãozinho fofinho, uma carne moderada e uma maionese com personalidade, para matar sua vontade de burguer e encher aquele espacinho que está vazio na barriga!</p>
+    </div>
+</section>
+
+<section id="frango" class="menu-category">
+
+        <section id="frango" class="menu-category">
+            <h2 class="section-title">Cheios de Frescura de Frango</h2>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">Chicken Bacon</span>
+                        <span class="item-price">R$21/R$32</span>
+                    </div>
+                    <p class="item-desc">Pão Brioche, Frango Empanado(aprox. 90g), Queijo, Bacon, Alface e Maionese
+                        Branca.</p>
+                    <div class="item-footer">
+                        <span>SEM FRITAS</span>
+                        <span>COM FRITAS</span>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">Chicken Little</span>
+                        <span class="item-price">R$28/R$40</span>
+                    </div>
+                    <p class="item-desc">Pão Brioche, Sobrecoxa desossada(aprox. 120g), Queijo, Alface no Barbecue
+                        Picante.</p>
+                    <div class="item-footer">
+                        <span>SEM FRITAS</span>
+                        <span>COM FRITAS</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="porcoes" class="menu-category">
+            <h2 class="section-title">Porções</h2>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">Batata Pequena</span>
+                        <span class="item-price">R$10</span>
+                    </div>
+                    <p class="item-desc">Cerca de 100g de Batata Frita.</p>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">Batata Grande</span>
+                        <span class="item-price">R$20</span>
+                    </div>
+                    <p class="item-desc">Cerca de 400g de Batata Frita.</p>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">Batata Com Cheddar e Bacon</span>
+                        <span class="item-price">R$30</span>
+                    </div>
+                    <p class="item-desc">Cerca de 400g de Batata Frita, Creme de Cheddar e Bacon.</p>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">Onion Rings</span>
+                        <span class="item-price">R$16</span>
+                    </div>
+                    <p class="item-desc">Cerca de 150g de Onion Rings.</p>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">Iscas de Frango Pequena</span>
+                        <span class="item-price">R$16</span>
+                    </div>
+                    <p class="item-desc">Cerca de 150g de Pedaços de Frango Empanados (nosso delicioso nuggets).</p>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">Iscas de Frango Grande</span>
+                        <span class="item-price">R$24</span>
+                    </div>
+                    <p class="item-desc">Cerca de 300g de Pedaços de Frango Empanados (nosso delicioso nuggets).</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="bebidas" class="menu-category">
+            <h2 class="section-title">Bebidas</h2>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">Refrigerante Lata</span>
+                        <span class="item-price">R$6,00</span>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">Suco Lata</span>
+                        <span class="item-price">R$6,00</span>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">Refrigerante 1,5L</span>
+                        <span class="item-price">R$11,00</span>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">Long Neck</span>
+                        <span class="item-price">R$12,00</span>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">Água sem Gás</span>
+                        <span class="item-price">R$3,00</span>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">Água com Gás</span>
+                        <span class="item-price">R$5,00</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="knowledge-section">
+            <h3>Pitada de Conhecimento</h3>
+            <div class="knowledge-item">
+                <p>Apesar de sua maior popularização ter sido feita no Estados Unidos, a história reconhece que o
+                    Hambúrguer, na verdade, é uma variação da alimentação de cavaleiros da Mongólia, no século XIII.</p>
+            </div>
+            <div class="knowledge-item">
+                <p>Em 1952, um tenista americano chamado Robert Falkenburg, inaugurou a primeira lanchonete no estilo
+                    americano no Rio de Janeiro, o Bob's.</p>
+            </div>
+            <div class="knowledge-item">
+                <p>A carne Smash, que nada mais é do que uma bolinha de carne esmagada contra a chapa, se popularizou
+                    nos últimos anos pela sua versatilidade e rápido preparo. É muito útil para alta demanda e muito
+                    utilizada no sistema de fast-food.</p>
+            </div>
+        </div>
+
+        <div class="social-links">
+            <a href="https://wa.me/+5561991798269" class="social-link" target="_blank">
+                <i class="fab fa-whatsapp"></i>
+            </a>
+            <a href="https://instagram.com/_mirantedavila/" class="social-link" target="_blank">
+                <i class="fab fa-instagram"></i>
+            </a>
+        </div>
+
+    <!--Localização -->
+
+    <section id="localizacao" class="location-section">
+        <h2 class="section-title">Nossa Localização</h2>
+        <div class="map-container">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d345.0860006762755!2d-47.91355956802737!3d-15.707447797593062!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e6!4m5!1s0x935a39e23b327207:0x3b1233738b596b34!2sMirante%20da%20Vila%20-%20Pqeat%20-%20Torto,%20Brasilia%20-%20Federal%20District!3m2!1d-15.707367999999999!2d-47.9133861!4m5!1s0x935a39e23b327207:0x3b1233738b596b34!2sSit,%20Pqeat%20-%20Torto,%20Bras%C3%ADlia%20-%20DF,%2070297-400!3m2!1d-15.707367999999999!2d-47.9133861!5e1!3m2!1spt-PT!2sbr!4v1743962053937!5m2!1spt-PT!2sbr" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <div class="address">
+            <p><i class="fas fa-map-marker-alt"></i> Mirante da Vila - Pqeat - Torto, Brasília - DF</p>
+            <p><i class="fas fa-phone"></i> (61) 99179-8269</p>
+        </div>
+    </section>
+    
+</main>
+    <footer>
+        <p>&copy; 2023 <a href="https://instagram.com/codesolutions" class="footer-link"
+                target="_blank">CodeSolutions</a>. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuBtn = document.getElementById('menuBtn');
+            const closeBtn = document.getElementById('closeBtn');
+            const navMenu = document.getElementById('navMenu');
+
+            menuBtn.addEventListener('click', function () {
+                navMenu.classList.add('active');
+            });
+
+            closeBtn.addEventListener('click', function () {
+                navMenu.classList.remove('active');
+            });
+
+            // Fecha o menu quando um link é clicado
+            const navLinks = document.querySelectorAll('.nav-menu a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function () {
+                    navMenu.classList.remove('active');
+                });
+            });
+
+            // Animação suave ao rolar para seções
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Efeito de aparecimento suave nos itens do menu quando eles entram na viewport
+            const menuItems = document.querySelectorAll('.menu-item');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            menuItems.forEach(item => {
+                item.style.opacity = 0;
+                item.style.transform = 'translateY(20px)';
+                item.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(item);
+            });
+        });
+    </script>
+</body>
+
+</html>
